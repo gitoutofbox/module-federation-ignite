@@ -31,8 +31,8 @@ export class ListComponent implements OnInit, OnDestroy {
       currency: 'USD',
       precision: 2,
     };
-    this.accounts = AppConstant.ACCOUNTS;
-    // this.accountsApiCall();
+    // this.accounts = AppConstant.ACCOUNTS;
+    this.accountsApiCall();
   }
 
   onCellPrepared(e: any) {
