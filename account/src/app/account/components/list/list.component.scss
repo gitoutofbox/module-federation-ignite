@@ -1,1 +1,12 @@
 // @import "src/assets/css/dx.scss"
+.container-y {
+  padding-top: var(--bs-gutter-y, 1.5rem);
+  padding-bottom: var(--bs-gutter-y, 1.5rem);
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.client-name-text {
+  cursor: pointer;
+  color: #007bff;
+}
