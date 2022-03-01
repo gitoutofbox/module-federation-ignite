@@ -61,7 +61,6 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   openAccountDetailsModal(template: TemplateRef<any>, data: any) {
-    console.log(data);
     this.selectedAccountNumber = data.accountNumber;
     this.selectedAccountId = data.id;
     let modalConfig: ModalOptions = {

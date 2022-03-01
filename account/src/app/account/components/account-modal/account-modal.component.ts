@@ -13,40 +13,7 @@ export class AccountModalComponent implements OnInit, OnChanges, OnDestroy {
 
   private accountDetailsSubscription?: Subscription;
   distributionList: any;
-  // distributionList: any = [
-  //   {
-  //     country: 'USA',
-  //     medals: 110,
-  //   },
-  //   {
-  //     country: 'China',
-  //     medals: 100,
-  //   },
-  //   {
-  //     country: 'Russia',
-  //     medals: 72,
-  //   },
-  //   {
-  //     country: 'Britain',
-  //     medals: 47,
-  //   },
-  //   {
-  //     country: 'Australia',
-  //     medals: 46,
-  //   },
-  //   {
-  //     country: 'Germany',
-  //     medals: 41,
-  //   },
-  //   {
-  //     country: 'France',
-  //     medals: 40,
-  //   },
-  //   {
-  //     country: 'South Korea',
-  //     medals: 31,
-  //   },
-  // ];
+  riskScore: any;
 
   constructor(private accService: AccountServices) {}
 
@@ -64,8 +31,11 @@ export class AccountModalComponent implements OnInit, OnChanges, OnDestroy {
       .getData(AppConfig.accountDetailsApi + this.accountId, header)
       .subscribe(
         (rsp) => {
+          this.riskScore = rsp.riskScore;
+          rsp.distribution.forEach((item: any) => {
+            item['percentage'] = item.accountDistribution.percentage;
+          });
           this.distributionList = rsp.distribution;
-          console.log(this.distributionList);
         },
         (error) => {
           console.log('Error occured');
@@ -73,9 +43,14 @@ export class AccountModalComponent implements OnInit, OnChanges, OnDestroy {
       );
   }
 
-  customizeTooltip = (arg: any) => ({
-    text: `${arg.valueText}`,
-  });
+  // customizeTooltip(e: any) {
+  //   console.log(e);
+  //   return `${e.percentText}`;
+  // }
+
+  customizeLabel(e: any) {
+    return `${e.percentText}`;
+  }
 
   ngOnDestroy(): void {
     if (this.accountDetailsSubscription) {
