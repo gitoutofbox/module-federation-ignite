@@ -6,28 +6,32 @@
 
   <dx-data-grid [dataSource]="accounts" [remoteOperations]="false" [allowColumnReordering]="true"
     [rowAlternationEnabled]="true" [showBorders]="true" [paging]="paging" (onCellPrepared)="onCellPrepared($event)">
-    <dxi-column caption="Client Name" dataField="client.name" alignment="right" cellTemplate="clientNameCellTemplate">
+    <dxi-column caption="Client Name" dataField="client.name" alignment="left">
     </dxi-column>
     <dxi-column caption="Age" dataField="client.age" alignment="right"></dxi-column>
-    <dxi-column caption="Account Number" dataField="accountNumber" alignment="right"></dxi-column>
+    <dxi-column caption="Account Number" dataField="accountNumber" alignment="right" cellTemplate="accnumberCellTemplate"></dxi-column>
     <dxi-column caption="Invested Amount" dataField="investedAmount" alignment="right" [format]="accountNumFormat">
     </dxi-column>
     <dxi-column caption="Risk Score" dataField="riskScore" alignment="right"></dxi-column>
-    <div *dxTemplate="let d of 'clientNameCellTemplate'">
-      <div class="client-name-text" (click)="openAccountDetailsModal(accountDetailsModal)">{{d.value}}</div>
+    <div *dxTemplate="let d of 'accnumberCellTemplate'">
+      <div class="client-name-text" (click)="openAccountDetailsModal(accountDetailsModal, d.data)">{{d.value}}</div>
     </div>
+
+    <dxo-pager [visible]="true" [allowedPageSizes]="allowedPageSizes" [showPageSizeSelector]="true"
+      [showInfo]="true" [showNavigationButtons]="true">
+    </dxo-pager>
   </dx-data-grid>
 </div>
 
 <ng-template #accountDetailsModal>
   <div class="modal-header" style="background-color: #344052;">
-    <h4 class="modal-title pull-left" style="color: #fff;">Account Details</h4>
+    <h4 class="modal-title pull-left" style="color: #fff;">Account Number : {{selectedAccountNumber}}</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    Account details will be shown here.
+    <app-account-modal [accountId]="selectedAccountId"></app-account-modal>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modalRef?.hide()">Close</button>

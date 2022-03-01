@@ -14,6 +14,9 @@ export class ListComponent implements OnInit, OnDestroy {
   paging: any;
   accountNumFormat: any;
   modalRef?: BsModalRef;
+  selectedAccountNumber: any;
+  selectedAccountId: any;
+  readonly allowedPageSizes = [5, 10, 'all'];
   private accountSubscription?: Subscription;
 
   constructor(
@@ -46,7 +49,7 @@ export class ListComponent implements OnInit, OnDestroy {
   accountsApiCall() {
     let header = { 'Content-type': 'application/json' };
     this.accountSubscription = this.accService
-      .getData(AppConfig.accountsApi)
+      .getData(AppConfig.accountsApi, header)
       .subscribe(
         (rsp) => {
           this.accounts = rsp;
@@ -57,7 +60,10 @@ export class ListComponent implements OnInit, OnDestroy {
       );
   }
 
-  openAccountDetailsModal(template: TemplateRef<any>) {
+  openAccountDetailsModal(template: TemplateRef<any>, data: any) {
+    console.log(data);
+    this.selectedAccountNumber = data.accountNumber;
+    this.selectedAccountId = data.id;
     let modalConfig: ModalOptions = {
       class: 'modal-lg',
       backdrop: 'static',

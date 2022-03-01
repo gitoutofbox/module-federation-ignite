@@ -10,12 +10,14 @@ import {
   DxDropDownButtonModule,
   DxTemplateModule,
   DxTreeViewModule,
+  DxPieChartModule,
 } from 'devextreme-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { AccountServices } from 'src/core/core.services';
+import { AccountModalComponent } from './components/account-modal/account-modal.component';
 
 const routes: Routes = [
   {
@@ -25,7 +27,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ListComponent],
+  declarations: [ListComponent, AccountModalComponent],
   imports: [
     CommonModule,
     DxDataGridModule,
@@ -37,6 +39,7 @@ const routes: Routes = [
     DxTemplateModule,
     HttpClientModule,
     DxChartModule,
+    DxPieChartModule,
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     RouterModule.forChild(routes),

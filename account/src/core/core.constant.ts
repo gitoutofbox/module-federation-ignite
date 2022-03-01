@@ -1,6 +1,6 @@
 export class AppConstant {
   public static PAGE_SIZE = 10;
-  public static ACCOUNTS = [
+  public static ACCOUNTS_DETAILS = [
     {
       id: 1,
       accountNumber: 1324,
