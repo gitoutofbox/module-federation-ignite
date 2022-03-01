@@ -1,23 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListComponent } from './components/list/list.component';
-import { DxBulletModule, DxButtonModule, DxChartModule, DxDataGridModule, DxDropDownBoxModule, DxDropDownButtonModule, DxTemplateModule, DxTreeViewModule } from 'devextreme-angular';
+import {
+  DxBulletModule,
+  DxButtonModule,
+  DxChartModule,
+  DxDataGridModule,
+  DxDropDownBoxModule,
+  DxDropDownButtonModule,
+  DxTemplateModule,
+  DxTreeViewModule,
+  DxPieChartModule,
+} from 'devextreme-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-
+import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
+import { AccountServices } from 'src/core/core.services';
+import { AccountModalComponent } from './components/account-modal/account-modal.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ListComponent
-  }
+    component: ListComponent,
+  },
 ];
 
 @NgModule({
-  declarations: [
-    ListComponent
-  ],
+  declarations: [ListComponent, AccountModalComponent],
   imports: [
     CommonModule,
     DxDataGridModule,
@@ -29,8 +39,11 @@ const routes: Routes = [
     DxTemplateModule,
     HttpClientModule,
     DxChartModule,
+    DxPieChartModule,
     TooltipModule.forRoot(),
-    RouterModule.forChild(routes)
-  ]
+    ModalModule.forRoot(),
+    RouterModule.forChild(routes),
+  ],
+  providers: [BsModalService, AccountServices],
 })
-export class AccountModule { }
+export class AccountModule {}

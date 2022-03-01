@@ -1,89 +1,80 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import 'devextreme/data/odata/store';
-// import shared from '@common/data-access';
-
-class Complaints {
-  complaint: string = '';
-
-  count: number = 0;
-}
-class ComplaintsWithPercent {
-  complaint: string = '';
-
-  count: number = 0;
-
-  cumulativePercent: number=0;
-}
-const complaintsData: Complaints[] = [
-  { complaint: 'Cold pizza', count: 780 },
-  { complaint: 'Not enough cheese', count: 120 },
-  { complaint: 'Underbaked or Overbaked', count: 52 },
-  { complaint: 'Delayed delivery', count: 1123 },
-  { complaint: 'Damaged pizza', count: 321 },
-  { complaint: 'Incorrect billing', count: 89 },
-  { complaint: 'Wrong size delivered', count: 222 },
-];
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { Subscription } from 'rxjs';
+import { AppConfig } from 'src/core/core.config';
+import { AppConstant } from 'src/core/core.constant';
+import { AccountServices } from 'src/core/core.services';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  // encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    // '../../../../../node_modules/devextreme/dist/css/dx.light.css', 
-    './list.component.scss']
+  styleUrls: ['./list.component.scss'],
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
+  accounts: any;
+  paging: any;
+  accountNumFormat: any;
+  modalRef?: BsModalRef;
+  selectedAccountNumber: any;
+  selectedAccountId: any;
+  readonly allowedPageSizes = [5, 10, 'all'];
+  private accountSubscription?: Subscription;
 
-  dataSource: DataSource;
-  dataSource1: ComplaintsWithPercent[];
+  constructor(
+    private modalService: BsModalService,
+    private accService: AccountServices
+  ) {}
 
-  
-  collapsed = false;
   ngOnInit(): void {
-      
+    this.paging = {
+      enabled: true,
+      pageSize: AppConstant.PAGE_SIZE,
+    };
+    this.accountNumFormat = {
+      type: 'currency',
+      currency: 'USD',
+      precision: 2,
+    };
+    // this.accounts = AppConstant.ACCOUNTS;
+    this.accountsApiCall();
   }
-  contentReady = (e: any) => {
-    if (!this.collapsed) {
-      this.collapsed = true;
-      e.component.expandRow(['EnviroCare']);
+
+  onCellPrepared(e: any) {
+    if (e.rowType === 'header') {
+      e.cellElement.style.backgroundColor = '#CEE3F6';
+      e.cellElement.style.color = '#242424';
+      e.cellElement.style.fontWeight = 'bold';
     }
-  };
-
-  customizeTooltip = (pointsInfo: any) => ({ text: `${parseInt(pointsInfo.originalValue)}%` });
-
-  constructor() {
-    this.dataSource = this.getDataSource();
-    this.dataSource1 = this.getComplaintsData();
-    // shared.getValue();
   }
 
-  getDataSource() {
-    return new DataSource({
-      store: {
-        type: 'odata',
-        url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
-        key: 'Id',
-        beforeSend(request) {
-          request.params.startDate = '2020-05-10';
-          request.params.endDate = '2020-05-15';
+  accountsApiCall() {
+    let header = { 'Content-type': 'application/json' };
+    this.accountSubscription = this.accService
+      .getData(AppConfig.accountsApi, header)
+      .subscribe(
+        (rsp) => {
+          this.accounts = rsp;
         },
-      },
-    });
+        (error) => {
+          console.log('Error occured');
+        }
+      );
   }
-  
 
-  getComplaintsData(): ComplaintsWithPercent[] {
-    const data = complaintsData.sort((a, b) => b.count - a.count);
-    const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
-    let cumulativeCount = 0;
-    return data.map((item, index) => {
-      cumulativeCount += item.count;
-      return {
-        complaint: item.complaint,
-        count: item.count,
-        cumulativePercent: Math.round(cumulativeCount * 100 / totalCount),
-      };
-    });
+  openAccountDetailsModal(template: TemplateRef<any>, data: any) {
+    console.log(data);
+    this.selectedAccountNumber = data.accountNumber;
+    this.selectedAccountId = data.id;
+    let modalConfig: ModalOptions = {
+      class: 'modal-lg',
+      backdrop: 'static',
+      keyboard: false,
+    };
+    this.modalRef = this.modalService.show(template, modalConfig);
   }
-  customizeLabelText = (info: any) => `${info.valueText}%`;
+
+  ngOnDestroy(): void {
+    if (this.accountSubscription) {
+      this.accountSubscription.unsubscribe();
+    }
+  }
 }

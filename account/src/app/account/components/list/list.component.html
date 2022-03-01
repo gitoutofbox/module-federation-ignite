@@ -1,134 +1,39 @@
-<div class="main">
+<div class="container container-y">
 
-  Hiiiiiii
-<dx-data-grid
-  id="gridContainer"
-  [dataSource]="dataSource"
-  [remoteOperations]="false"
-  [allowColumnReordering]="true"
-  [rowAlternationEnabled]="true"
-  [showBorders]="true"
-  (onContentReady)="contentReady($event)"
->
-  <dxo-paging [pageSize]="10"></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [allowedPageSizes]="[10, 25, 50, 100]"
-  ></dxo-pager>
-  <dxo-search-panel
-    [visible]="true"
-    [highlightCaseSensitive]="true"
-  ></dxo-search-panel>
-  <dxo-group-panel [visible]="true"></dxo-group-panel>
-  <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-
-  <dxi-column dataField="Product" [groupIndex]="0"></dxi-column>
-  <dxi-column
-    dataField="Amount"
-    caption="Sale Amount"
-    dataType="number"
-    format="currency"
-    alignment="right"
-  ></dxi-column>
-  <dxi-column
-    caption="Discount %"
-    dataField="Discount"
-    cellTemplate="discountCellTemplate"
-    dataType="number"
-    format="percent"
-    alignment="right"
-    [allowGrouping]="false"
-    cssClass="bullet"
-  ></dxi-column>
-  <dxi-column dataField="SaleDate" dataType="date"></dxi-column>
-  <dxi-column dataField="Region" dataType="string"></dxi-column>
-  <dxi-column dataField="Sector" dataType="string"></dxi-column>
-  <dxi-column dataField="Channel" dataType="string"></dxi-column>
-  <dxi-column dataField="Customer" dataType="string" [width]="150"></dxi-column>
-
-  <div *dxTemplate="let d of 'discountCellTemplate'">
-    <div class="chart-cell">
-      <dx-bullet
-        [showTarget]="false"
-        [showZeroLevel]="true"
-        [startScaleValue]="0"
-        [endScaleValue]="100"
-        [value]="d.value * 100"
-      >
-        <dxo-size [width]="150" [height]="35"></dxo-size>
-        <dxo-tooltip
-          [enabled]="true"
-          [paddingTopBottom]="2"
-          [customizeTooltip]="customizeTooltip"
-        >
-          <dxo-font [size]="18"></dxo-font>
-        </dxo-tooltip>
-        <dxo-margin [top]="5" [bottom]="0" [left]="5"></dxo-margin>
-      </dx-bullet>
-    </div>
+  <div class="py-3">
+    <h4 class="modal-title pull-left">Accounts Dashboard</h4>
   </div>
-</dx-data-grid>
 
+  <dx-data-grid [dataSource]="accounts" [remoteOperations]="false" [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true" [showBorders]="true" [paging]="paging" (onCellPrepared)="onCellPrepared($event)">
+    <dxi-column caption="Client Name" dataField="client.name" alignment="left">
+    </dxi-column>
+    <dxi-column caption="Age" dataField="client.age" alignment="right"></dxi-column>
+    <dxi-column caption="Account Number" dataField="accountNumber" alignment="right" cellTemplate="accnumberCellTemplate"></dxi-column>
+    <dxi-column caption="Invested Amount" dataField="investedAmount" alignment="right" [format]="accountNumFormat">
+    </dxi-column>
+    <dxi-column caption="Risk Score" dataField="riskScore" alignment="right"></dxi-column>
+    <div *dxTemplate="let d of 'accnumberCellTemplate'">
+      <div class="client-name-text" (click)="openAccountDetailsModal(accountDetailsModal, d.data)">{{d.value}}</div>
+    </div>
 
-
-
-<dx-chart
-  id="chart"
-  [dataSource]="dataSource1"
-  title="Pizza Shop Complaints"
-  palette="Harmony Light"
->
-  <dxi-value-axis name="frequency" position="left" [tickInterval]="300">
-  </dxi-value-axis>
-  <dxi-value-axis
-    name="percentage"
-    position="right"
-    [showZero]="true"
-    [tickInterval]="20"
-    [valueMarginsEnabled]="false"
-  >
-    <dxo-label [customizeText]="customizeLabelText"></dxo-label>
-    <dxi-constant-line
-      [value]="80"
-      color="#fc3535"
-      dashStyle="dash"
-      [width]="2"
-    >
-      <dxo-label [visible]="false"></dxo-label>
-    </dxi-constant-line>
-  </dxi-value-axis>
-  <dxo-argument-axis>
-    <dxo-label overlappingBehavior="stagger"></dxo-label>
-  </dxo-argument-axis>
-  <dxo-tooltip
-    [enabled]="true"
-    [shared]="true"
-    [customizeTooltip]="customizeTooltip"
-  >
-  </dxo-tooltip>
-  <dxo-common-series-settings argumentField="complaint">
-  </dxo-common-series-settings>
-  <dxi-series
-    type="bar"
-    valueField="count"
-    axis="frequency"
-    name="Complaint frequency"
-    color="#fac29a"
-  >
-  </dxi-series>
-  <dxi-series
-    type="spline"
-    valueField="cumulativePercent"
-    axis="percentage"
-    name="Cumulative percentage"
-    color="#6b71c3"
-  >
-  </dxi-series>
-  <dxo-legend verticalAlignment="top" horizontalAlignment="center">
-  </dxo-legend>
-</dx-chart>
-
+    <dxo-pager [visible]="true" [allowedPageSizes]="allowedPageSizes" [showPageSizeSelector]="true"
+      [showInfo]="true" [showNavigationButtons]="true">
+    </dxo-pager>
+  </dx-data-grid>
 </div>
 
-
-
+<ng-template #accountDetailsModal>
+  <div class="modal-header" style="background-color: #344052;">
+    <h4 class="modal-title pull-left" style="color: #fff;">Account Number : {{selectedAccountNumber}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-account-modal [accountId]="selectedAccountId"></app-account-modal>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modalRef?.hide()">Close</button>
+  </div>
+</ng-template>
