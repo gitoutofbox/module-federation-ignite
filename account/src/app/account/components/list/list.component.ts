@@ -14,8 +14,7 @@ export class ListComponent implements OnInit, OnDestroy {
   paging: any;
   accountNumFormat: any;
   modalRef?: BsModalRef;
-  selectedAccountNumber: any;
-  selectedAccountId: any;
+  selectedAccountDetails: any;
   readonly allowedPageSizes = [5, 10, 'all'];
   private accountSubscription?: Subscription;
 
@@ -61,8 +60,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   openAccountDetailsModal(template: TemplateRef<any>, data: any) {
-    this.selectedAccountNumber = data.accountNumber;
-    this.selectedAccountId = data.id;
+    this.selectedAccountDetails = data;
     let modalConfig: ModalOptions = {
       class: 'modal-lg',
       backdrop: 'static',

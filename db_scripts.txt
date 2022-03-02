@@ -1,0 +1,27 @@
+SELECT * from accounts;
+SELECT * from clients; 
+SELECT * from stockOptions;
+SELECT * from accountDistributions;
+
+UPDATE accounts SET riskScore = 82 WHERE id = 12;
+
+Insert into clients values(12, "Paul Ince", 33, DATE('now'), DATE('now'));
+Insert into accounts" values(12, 98041020, 12, 99500, 79, DATE('now'), DATE('now'));
+insert into stockOptions values (7, 'Gold', DATE(), DATE());
+
+insert into accountDistributions values (27, 8, 7, 60, DATE(), DATE());
+insert into accountDistributions values (28, 8, 3, 5, DATE(), DATE());
+insert into accountDistributions values (29, 8, 4, 35, DATE(), DATE());
+
+insert into accountDistributions values (30, 9, 2, 30, DATE(), DATE());
+insert into accountDistributions values (31, 9, 5, 70, DATE(), DATE());
+
+insert into accountDistributions values (32, 11, 5, 25, DATE(), DATE());
+insert into accountDistributions values (33, 11, 6, 15, DATE(), DATE());
+insert into accountDistributions values (34, 11, 4, 10, DATE(), DATE());
+insert into accountDistributions values (35, 11, 3, 25, DATE(), DATE());
+insert into accountDistributions values (36, 11, 7, 25, DATE(), DATE());
+
+insert into accountDistributions values (34, 12, 6, 40, DATE(), DATE());
+insert into accountDistributions values (35, 12, 5, 35, DATE(), DATE());
+insert into accountDistributions values (36, 12, 1, 25, DATE(), DATE());

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-6">
-        <dx-pie-chart id="pie" type="doughnut" title="Investment Distribution" palette="Soft Pastel"
-            [dataSource]="distributionList">
+        <h5 class="text-center text-blue">Investment Distribution</h5>
+        <dx-pie-chart id="pie" type="doughnut" palette="Carmine" [dataSource]="distributionList">
             <dxi-series argumentField="name" valueField="percentage">
                 <dxo-label [visible]="true" [customizeText]="customizeLabel">
                     <dxo-connector [visible]="true"></dxo-connector>
@@ -11,44 +11,23 @@
         </dx-pie-chart>
     </div>
     <div class="col-6">
+        <h5 class="text-center text-blue">Account Risk Score</h5>
         <dx-circular-gauge id="gauge" [value]="riskScore">
             <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
                 <dxo-label [useRangeColors]="true"></dxo-label>
             </dxo-scale>
+            <dxo-value-indicator type="triangleNeedle" [color]="riskColorCode" [offset]="10" [width]="12" spindleGapSize="0"
+                spindleSize="20">
+            </dxo-value-indicator>
             <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
-            <dxo-range-container palette="soft pastel">
-                <dxi-range [startValue]="50" [endValue]="90"></dxi-range>
-                <dxi-range [startValue]="90" [endValue]="130"></dxi-range>
-                <dxi-range [startValue]="130" [endValue]="150"></dxi-range>
+            <dxo-range-container>
+                <dxi-range [startValue]="0" [endValue]="50" color="#228B22"></dxi-range>
+                <dxi-range [startValue]="50" [endValue]="80" color="#F09E41"></dxi-range>
+                <dxi-range [startValue]="80" [endValue]="100" color="#CE2029"></dxi-range>
             </dxo-range-container>
-            <dxo-title text="Account Risk Score">
-                <dxo-font [size]="28"></dxo-font>
+            <dxo-title [text]="riskScore" verticalAlignment="bottom">
+                <dxo-font [size]="20" [weight]="900" [color]="riskColorCode"></dxo-font>
             </dxo-title>
         </dx-circular-gauge>
     </div>
 </div>
-
-<!-- <dx-pie-chart id="pie" type="doughnut" title="Investment Distribution" palette="Soft Pastel"
-    [dataSource]="distributionList">
-    <dxi-series argumentField="name" valueField="percentage">
-        <dxo-label [visible]="true" [customizeText]="customizeLabel">
-            <dxo-connector [visible]="true"></dxo-connector>
-        </dxo-label>
-    </dxi-series>
-    <dxo-legend [margin]="0" horizontalAlignment="right" verticalAlignment="top"></dxo-legend>
-</dx-pie-chart>
-
-<dx-circular-gauge id="gauge" [value]="riskScore">
-    <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
-        <dxo-label [useRangeColors]="true"></dxo-label>
-    </dxo-scale>
-    <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
-    <dxo-range-container palette="soft pastel">
-        <dxi-range [startValue]="50" [endValue]="90"></dxi-range>
-        <dxi-range [startValue]="90" [endValue]="130"></dxi-range>
-        <dxi-range [startValue]="130" [endValue]="150"></dxi-range>
-    </dxo-range-container>
-    <dxo-title text="Account Risk Score">
-        <dxo-font [size]="28"></dxo-font>
-    </dxo-title>
-</dx-circular-gauge> -->
