@@ -11,6 +11,7 @@ import {
   DxTemplateModule,
   DxTreeViewModule,
   DxPieChartModule,
+  DxCircularGaugeModule,
 } from 'devextreme-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
@@ -40,6 +41,7 @@ const routes: Routes = [
     HttpClientModule,
     DxChartModule,
     DxPieChartModule,
+    DxCircularGaugeModule,
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     RouterModule.forChild(routes),

@@ -13,40 +13,9 @@ export class AccountModalComponent implements OnInit, OnChanges, OnDestroy {
 
   private accountDetailsSubscription?: Subscription;
   distributionList: any;
-  // distributionList: any = [
-  //   {
-  //     country: 'USA',
-  //     medals: 110,
-  //   },
-  //   {
-  //     country: 'China',
-  //     medals: 100,
-  //   },
-  //   {
-  //     country: 'Russia',
-  //     medals: 72,
-  //   },
-  //   {
-  //     country: 'Britain',
-  //     medals: 47,
-  //   },
-  //   {
-  //     country: 'Australia',
-  //     medals: 46,
-  //   },
-  //   {
-  //     country: 'Germany',
-  //     medals: 41,
-  //   },
-  //   {
-  //     country: 'France',
-  //     medals: 40,
-  //   },
-  //   {
-  //     country: 'South Korea',
-  //     medals: 31,
-  //   },
-  // ];
+  riskScore: any;
+  riskColorCode: any;
+  accountDetails: any;
 
   constructor(private accService: AccountServices) {}
 
@@ -58,14 +27,31 @@ export class AccountModalComponent implements OnInit, OnChanges, OnDestroy {
     // this.accountDetailsApiCall();
   }
 
+  applyRiskColorCode() {
+    if (this.riskScore < 50) {
+      this.riskColorCode = '#228B22';
+    } else if (this.riskScore >= 50 && this.riskScore < 80) {
+      this.riskColorCode = '#F09E41';
+    } else if (this.riskScore >= 80) {
+      this.riskColorCode = '#CE2029';
+    } else {
+      this.riskColorCode = '#0076cb';
+    }
+  }
+
   accountDetailsApiCall() {
     let header = { 'Content-type': 'application/json' };
     this.accountDetailsSubscription = this.accService
       .getData(AppConfig.accountDetailsApi + this.accountId, header)
       .subscribe(
         (rsp) => {
+          this.accountDetails = rsp;
+          this.riskScore = rsp.riskScore;
+          this.applyRiskColorCode();
+          rsp.distribution.forEach((item: any) => {
+            item['percentage'] = item.accountDistribution.percentage;
+          });
           this.distributionList = rsp.distribution;
-          console.log(this.distributionList);
         },
         (error) => {
           console.log('Error occured');
@@ -73,9 +59,14 @@ export class AccountModalComponent implements OnInit, OnChanges, OnDestroy {
       );
   }
 
-  customizeTooltip = (arg: any) => ({
-    text: `${arg.valueText}`,
-  });
+  // customizeTooltip(e: any) {
+  //   console.log(e);
+  //   return `${e.percentText}`;
+  // }
+
+  customizeLabel(e: any) {
+    return `${e.percentText}`;
+  }
 
   ngOnDestroy(): void {
     if (this.accountDetailsSubscription) {

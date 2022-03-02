@@ -25,13 +25,13 @@
 
 <ng-template #accountDetailsModal>
   <div class="modal-header" style="background-color: #344052;">
-    <h4 class="modal-title pull-left" style="color: #fff;">Account Number : {{selectedAccountNumber}}</h4>
+    <h5 class="modal-title pull-left" style="color: #fff;">Account Number : {{selectedAccountDetails.accountNumber}} | Invested Amount: {{selectedAccountDetails.investedAmount | currency}}</h5>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <app-account-modal [accountId]="selectedAccountId"></app-account-modal>
+    <app-account-modal [accountId]="selectedAccountDetails.id"></app-account-modal>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modalRef?.hide()">Close</button>
